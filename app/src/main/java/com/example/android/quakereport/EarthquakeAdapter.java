@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by vinee on 23-Jan-17.
+ * Created by vineet on 23-Jan-17.
  */
 
 public class EarthquakeAdapter extends ArrayAdapter {
@@ -126,13 +126,13 @@ public class EarthquakeAdapter extends ArrayAdapter {
      * Return the formatted magnitude string showing 1 decimal place (i.e. "3.2")
      * from a decimal magnitude value.
      */
-    public String formatMag (double mag){
+    public String formatMag(double mag) {
         DecimalFormat formatter = new DecimalFormat("0.0");
         return formatter.format(mag);
     }
 
-    public int getMagnitudeColor(double magnitude){
-        int color =(int) magnitude;
+    public int getMagnitudeColor(double magnitude) {
+        int color = (int) magnitude;
         switch (color) {
             case 0:
             case 1:
@@ -168,7 +168,7 @@ public class EarthquakeAdapter extends ArrayAdapter {
                 return magnitude10Color;
         }
     }
-    /*
+    /**
     NOTE: Another Way to Implement this switch case is as follows
 
     private int getMagnitudeColor(double magnitude) {

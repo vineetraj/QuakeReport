@@ -8,23 +8,25 @@ public class Earthquake {
     private double mag;
     private String name;
     private long mTimeInMillSeconds;
-    /** Website URL of the earthquake */
+    /**
+     * Website URL of the earthquake
+     */
     private String mUrl;
 
     /**
      * Constructs a new {@link Earthquake} object.
      *
-     * @param mag is the magnitude (size) of the earthquake
-     * @param name is the location where the earthquake happened
+     * @param mag               is the magnitude (size) of the earthquake
+     * @param name              is the location where the earthquake happened
      * @param timeInMillSeconds is the time in milliseconds (from the Epoch) when the
-     *                           earthquake happened
-     * @param url is the website URL to find more details about the earthquake
+     *                          earthquake happened
+     * @param url               is the website URL to find more details about the earthquake
      */
     public Earthquake(double mag, String name, long timeInMillSeconds, String url) {
         this.mag = mag;
         this.name = name;
         this.mTimeInMillSeconds = timeInMillSeconds;
-        this.mUrl= url;
+        this.mUrl = url;
     }
 
     public double getMag() {
@@ -38,6 +40,7 @@ public class Earthquake {
     public long getTimeInMillSeconds() {
         return mTimeInMillSeconds;
     }
+
     /**
      * Returns the website URL to find more information about the earthquake.
      */
