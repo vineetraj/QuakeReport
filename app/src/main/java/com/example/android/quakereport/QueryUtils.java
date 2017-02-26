@@ -38,6 +38,10 @@ public final class QueryUtils {
 
     /**
      * Query the USGS dataset and return an {@link Earthquake} object to represent a list of earthquake.
+     * Add in the fetchEarthquakeData() helper method that ties all the steps together - creating a URL,
+     * sending the request, processing the response.
+     * Since this is the only “public” QueryUtils method that the EarthquakeAsyncTask needs to interact with,
+     * make all other helper methods in QueryUtils “private”
      */
     public static ArrayList<Earthquake> fetchEarthquakeData(String requestUrl) {
         // Create URL object
@@ -51,10 +55,10 @@ public final class QueryUtils {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
 
-        // Extract relevant fields from the JSON response and create an {@link Event} object
+        // Extract relevant fields from the JSON response and create an {@link Earthquake}s
         ArrayList<Earthquake> earthquake = extractFeatureFromJson(jsonResponse);
 
-        // Return the {@link Event} object as the result fo the {@link EarthquakeAsyncTask}
+        // Return the list of {@link Earthquake}s
         return earthquake;
     }
 
@@ -74,6 +78,7 @@ public final class QueryUtils {
     /**
      * Make an HTTP request to the given URL and return a String as the response.
      */
+
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -84,6 +89,7 @@ public final class QueryUtils {
 
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
+
         try {
             //1. this is about setting up the connection request
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -91,8 +97,9 @@ public final class QueryUtils {
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.setRequestMethod("GET");
 
+            Log.e("inside query utils", "before connect method");
             urlConnection.connect(); //2. Here we actually establish HTTP connection with the server
-
+            Log.e("inside query utils", "after connect method");
             //3. If the request was successful (response code 200),
             // then read the input stream and parse the response.
             if (urlConnection.getResponseCode() == 200) {
@@ -160,16 +167,26 @@ public final class QueryUtils {
             JSONArray earthquakeArray = root.getJSONArray("features");
 
             for (int i = 0; i < earthquakeArray.length(); i++) {
+                // Get a single earthquake at position i within the list of earthquakes
                 JSONObject currentEarthquake = earthquakeArray.getJSONObject(i);
+                /**
+                 * For a given earthquake, extract the JSONObject associated with the
+                 * key called "properties", which represents a list of all properties
+                 * for that earthquake.
+                 */
                 JSONObject properties = currentEarthquake.getJSONObject("properties");
+                // Extract the value for the key called "mag"
                 double mag = properties.getDouble("mag");
+                // Extract the value for the key called "place"
                 String place = properties.getString("place");
                 long time = properties.getLong("time");
                 //Extract the value for the key called "url"
                 String url = properties.getString("url");
 
-                // Create a new {@link Earthquake} object with the magnitude, location, time,
-                // and url from the JSON response.
+                /**
+                 * Create a new {@link Earthquake} object with the magnitude, location, time,
+                 * and url from the JSON response.
+                 */
                 Earthquake eq = new Earthquake(mag, place, time, url);
                 earthquakes.add(eq);
             }

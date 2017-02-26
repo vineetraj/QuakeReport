@@ -1,7 +1,4 @@
 package com.example.android.quakereport;
-/*
-*Created by vineet on 22-Jan-17.
- */
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -24,13 +21,11 @@ import java.util.Date;
 public class EarthquakeAdapter extends ArrayAdapter {
 
     ArrayList mArrayList;
-    int mWordResid;
 
-    public EarthquakeAdapter(Context context, ArrayList arrayList, int WordResId) {
+    public EarthquakeAdapter(Context context, ArrayList arrayList) {
         super(context, 0, arrayList);
 
         this.mArrayList = arrayList;
-        this.mWordResid = WordResId;
     }
 
     @Override

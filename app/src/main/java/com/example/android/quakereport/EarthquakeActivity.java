@@ -19,7 +19,7 @@ public class EarthquakeActivity extends AppCompatActivity {
     /**
      * URL for earthquake data from the USGS dataset
      */
-    private static final String USGS_REQUEST_URL = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+    private static final String USGS_REQUEST_URL = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
     private EarthquakeAdapter mAdapter;
 
     @Override
@@ -27,14 +27,11 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        /** Create a fake list of earthquake locations */
-        ArrayList<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(USGS_REQUEST_URL);
-
         /** Find a reference to the {@link ListView} in the layout */
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
         /** Create a new adapter that takes the list of earthquakes as input */
-        mAdapter = new EarthquakeAdapter(this, earthquakes, R.id.list);
+        mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
 
         /** Set the adapter on the {@link ListView} so the list can be populated in the user interface */
         earthquakeListView.setAdapter(mAdapter);
