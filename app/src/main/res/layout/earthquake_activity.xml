@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Layout for a list of earthquakes -->
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/list"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:divider="@null"
+          android:dividerHeight="0dp"
+          android:orientation="vertical">
+</ListView>
+
+    <!--To hide the divider between list items,
+    there are two attributes that we can set on the ListView XML element within the earthquake_activity.xml file.
+    We want to set android:divider to be “@null” and android:dividerHeight to be “0dp”.-->
