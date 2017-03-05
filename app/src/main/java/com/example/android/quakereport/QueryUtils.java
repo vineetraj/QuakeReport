@@ -44,6 +44,7 @@ public final class QueryUtils {
      * make all other helper methods in QueryUtils “private”
      */
     public static ArrayList<Earthquake> fetchEarthquakeData(String requestUrl) {
+        Log.i("inside QueryUtils", "fetchEarthquakeData()");
         // Create URL object
         URL url = createUrl(requestUrl);
 
