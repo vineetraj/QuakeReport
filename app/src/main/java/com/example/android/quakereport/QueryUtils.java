@@ -55,6 +55,16 @@ public final class QueryUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
+        /**
+         * Force the background thread to sleep for 2 seconds
+         * to check that the loading indicator will lead to the list of earthquake results
+
+         try {
+         Thread.sleep(2000);
+         } catch (InterruptedException e) {
+         e.printStackTrace();
+         }
+         */
 
         // Extract relevant fields from the JSON response and create an {@link Earthquake}s
         ArrayList<Earthquake> earthquake = extractFeatureFromJson(jsonResponse);

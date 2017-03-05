@@ -22,6 +22,13 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:textSize="25sp"/>
+    <!-- Loading indicator is only shown before the first load -->
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>
     <!--To hide the divider between list items,
     there are two attributes that we can set on the ListView XML element within the earthquake_activity.xml file.
