@@ -4,8 +4,11 @@ package com.example.android.quakereport;
  */
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +46,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
      * TextView that is displayed when the list is empty
      */
     private TextView mEmptyStateTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,12 +88,23 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         LoaderManager loaderManager = getLoaderManager();
         Log.i("inside Eqact.", "initLoader() will b called");
         /**
+         * To query the active network and determine if it has Internet connectivity.
+         */
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (isConnected)
+        /**
          * Initialize the loader. Pass in the int ID constant defined above and pass in null for
          * the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
          * because this activity implements the LoaderCallbacks interface).
          */
-
-        loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+            loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+        else
+            mEmptyStateTextView.setText(R.string.no_internet);
     }
 
     @Override
