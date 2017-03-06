@@ -124,6 +124,13 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         }
     }
 
+    /**
+     * we need to look up the user’s preferred sort order when we build the URI for making the HTTP request.
+     * Read from SharedPreferences and check for the value associated with the key: getString(R.string.settings_order_by_key).
+     * When building the URI and appending query parameters,
+     * instead of hardcoding the “orderby” parameter to be “time”,
+     * we will use the user’s preference (stored in the orderBy variable).
+     */
     @Override
     public Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
         Log.i("inside Eqact.", "onCreateLoader()");
@@ -132,6 +139,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         // read the user’s latest preferences for the minimum magnitude
         String minMagnitude = sharedPrefs.getString(getString(R.string.settings_min_magnitude_key), getString(R.string.settings_min_magnitude_default));
+        String orderBy = sharedPrefs.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
+
         // The method Uri.parse creates a new Uri object from a properly formatted String
         Uri baseUri = Uri.parse(USGS_REQUEST_URL);
         // construct a proper URI with their preference
@@ -140,7 +149,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         uriBuilder.appendQueryParameter("format", "geojson");
         uriBuilder.appendQueryParameter("limit", "10");
         uriBuilder.appendQueryParameter("minmag", minMagnitude);
-        uriBuilder.appendQueryParameter("orderby", "time");
+        uriBuilder.appendQueryParameter("orderby", orderBy);
         // create a new Loader for that URI
         return new EarthquakeLoader(this, uriBuilder.toString());
     }
