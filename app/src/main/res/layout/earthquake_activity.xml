@@ -5,15 +5,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-    <!-- Layout for a list of earthquakes -->
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:orientation="vertical"/>
-    <!-- EmptyView(TextView) is only visible when the list has no items. -->
+    <!-- emptyListView(TextView) is only visible when the list has no items. -->
     <!-- don't place TextView inside ListView while using adapter -->
     <TextView
         android:id="@+id/empty_view"
@@ -22,6 +14,15 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:textSize="25sp"/>
+    <!-- Layout for a list of earthquakes -->
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:orientation="vertical"/>
+
     <!-- Loading indicator is only shown before the first load -->
     <ProgressBar
         android:id="@+id/progress"

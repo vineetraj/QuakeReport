@@ -37,7 +37,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int EARTHQUAKE_LOADER_ID = 1;
-
     /**
      * Adapter for the list of earthquakes
      */
@@ -46,6 +45,10 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
      * TextView that is displayed when the list is empty
      */
     private TextView mEmptyStateTextView;
+    /**
+     * ProgressBar that is displayed when loading data from internet
+     */
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +57,14 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         /** Find a reference to the {@link ListView} in the layout */
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
+
         /** we need to hook up the TextView as the empty view of the ListView.
          * We can use the ListView setEmptyView() method*/
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         earthquakeListView.setEmptyView(mEmptyStateTextView);
+
+        /** Find a reference to the {@link ProgressBar} in the layout */
+        mProgressBar = (ProgressBar) findViewById(R.id.progress);
 
         /** Create a new adapter that takes the list of earthquakes as input */
         mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
@@ -103,8 +110,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
          * because this activity implements the LoaderCallbacks interface).
          */
             loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
-        else
+        else {
             mEmptyStateTextView.setText(R.string.no_internet);
+            // Hide loading indicator when there's no internet connection
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -120,9 +130,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         Log.i("inside Eqact.", "onLoadFinished()");
         // Set empty state text to display "No earthquakes found."
         mEmptyStateTextView.setText(R.string.msg);
-        // Hide loading indicator because the data has been loaded
-        ProgressBar pgBar = (ProgressBar) findViewById(R.id.progress);
-        pgBar.setVisibility(View.GONE);
         // Clear the adapter of previous earthquake data
         mAdapter.clear();
 
@@ -131,6 +138,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         if (earthquakes != null && !earthquakes.isEmpty()) {
             mAdapter.addAll(earthquakes);
         }
+        // Hide loading indicator because the data has been loaded
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
