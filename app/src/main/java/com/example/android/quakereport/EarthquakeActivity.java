@@ -7,12 +7,16 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,9 +29,12 @@ import java.util.List;
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>> {
 
     /**
-     * URL for earthquake data from the USGS dataset
+     * URL for earthquake data from the USGS dataset was earlier...
+     * "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10"
+     * <p>
+     * the value of the USGS_REQUEST_URL constant in the EarthquakeActivity class is now the base URI
      */
-    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
+    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
 
     /**
      * First we need to specify an ID for our loader.
@@ -120,8 +127,22 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @Override
     public Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
         Log.i("inside Eqact.", "onCreateLoader()");
-        //Create a new loader for the given URL
-        return new EarthquakeLoader(this, USGS_REQUEST_URL);
+        // getDefaultSharedPreferences() uses a default preference-file name (like com.example.something)
+        // This default is set per application, so all activities in the same app context can access it easily
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // read the user’s latest preferences for the minimum magnitude
+        String minMagnitude = sharedPrefs.getString(getString(R.string.settings_min_magnitude_key), getString(R.string.settings_min_magnitude_default));
+        // The method Uri.parse creates a new Uri object from a properly formatted String
+        Uri baseUri = Uri.parse(USGS_REQUEST_URL);
+        // construct a proper URI with their preference
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+        // use UriBuilder.appendQueryParameter() methods to add additional parameters to the URI
+        uriBuilder.appendQueryParameter("format", "geojson");
+        uriBuilder.appendQueryParameter("limit", "10");
+        uriBuilder.appendQueryParameter("minmag", minMagnitude);
+        uriBuilder.appendQueryParameter("orderby", "time");
+        // create a new Loader for that URI
+        return new EarthquakeLoader(this, uriBuilder.toString());
     }
 
     //This method updates the UI with the result
@@ -147,5 +168,27 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         Log.i("inside Eqact.", "onLoaderReset()");
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
+    }
+
+    /**
+     * overriding a couple methods to inflate the menu and respond
+     * when users click on our menu item
+     */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
