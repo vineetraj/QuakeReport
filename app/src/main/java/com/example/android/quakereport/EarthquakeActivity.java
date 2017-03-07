@@ -65,8 +65,10 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         /** Find a reference to the {@link ListView} in the layout */
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
-        /** we need to hook up the TextView as the empty view of the ListView.
-         * We can use the ListView setEmptyView() method*/
+        /**
+         * we need to hook up the TextView as the empty view of the ListView.
+         * We can use the ListView setEmptyView() method
+         */
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         earthquakeListView.setEmptyView(mEmptyStateTextView);
 
@@ -79,8 +81,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         /** Set the adapter on the {@link ListView} so the list can be populated in the user interface */
         earthquakeListView.setAdapter(mAdapter);
 
-        /**Set an item click listener on the ListView, which sends an intent to a web browser
-         to open a website with more information about the selected earthquake */
+        /** Set an item click listener on the ListView, which sends an intent to a web browser
+         * to open a website with more information about the selected earthquake
+         */
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -125,11 +128,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     }
 
     /**
-     * we need to look up the user’s preferred sort order when we build the URI for making the HTTP request.
+     * Look up the user’s preferred sort order when we build the URI for making the HTTP request.
      * Read from SharedPreferences and check for the value associated with the key: getString(R.string.settings_order_by_key).
      * When building the URI and appending query parameters,
-     * instead of hardcoding the “orderby” parameter to be “time”,
-     * we will use the user’s preference (stored in the orderBy variable).
+     * instead of hardcoding the “orderby” parameter to be “time” (for getting most recent earthquakes)
+     * use the user’s preference (stored in the orderBy variable).
      */
     @Override
     public Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
@@ -180,16 +183,17 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     }
 
     /**
-     * overriding a couple methods to inflate the menu and respond
-     * when users click on our menu item
+     * method to inflate the menu
      */
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * method to respond when users click on our menu item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

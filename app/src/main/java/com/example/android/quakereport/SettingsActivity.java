@@ -19,70 +19,70 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
     }
 
+    /**
+     * inner class declared inside SettingsActivity class
+     */
+    //use OnPreferenceChangeListener interface to get notified when a preference changes
     public static class EarthquakePreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
-        /**
-         * add additional logic in the EarthquakePreferenceFragment so that it is aware of the new ListPreference,
-         * similar to what we did for the EditTextPreference.
-         * In the onCreate() method of the fragment, find the “order by” Preference object according to its key.
-         * Then call the bindPreferenceSummaryToValue() helper method on this Preference object,
-         * which will set this fragment as the OnPreferenceChangeListener and update the summary
-         * so that it displays the current value stored in SharedPreferences.
-         */
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
             /**
-             * we still need to update the preference summary when the settings activity is launched.
-             * Given the key of a preference, we can use PreferenceFragment's findPreference() method to get the Preference object,
-             * and setup the preference using a helper method called bindPreferenceSummaryToValue().
+             * logic to make the EarthquakePreferenceFragment aware of the new ListPreference
+             *
+             * update the preference summary when the settings activity is launched.
              */
+            // use PreferenceFragment's findPreference() method to get the Preference object
             Preference minMagnitude = findPreference(getString(R.string.settings_min_magnitude_key));
+            // setup the preference using a helper method called bindPreferenceSummaryToValue()
             bindPreferenceSummaryToValue(minMagnitude);
 
+            // find the “order by” Preference object according to its key
             Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
+            // call the bindPreferenceSummaryToValue() helper method on this Preference object
             bindPreferenceSummaryToValue(orderBy);
         }
 
         /**
-         * It's often useful for the app to know immediately when a preference is changed,
-         * especially when that preference change should have some visible impact on the UI.
-         * To do this, our PreferenceFragment can implement the OnPreferenceChangeListener interface to get notified when a preference changes.
-         * Then when a single Preference has been changed by the user and is about to be saved,
-         * the onPreferenceChange() method will be invoked with the key of the preference that was changed.
-         * Note that this method returns a boolean, which allows us to prevent a proposed preference change by returning false.
+         * When a single Preference has been changed by the user and is about to be saved,
+         * the onPreferenceChange() method is invoked with the key of the preference that was changed.
          */
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            //take care of updating the displayed preference summary after it has been changed
             String stringValue = newValue.toString();
             /**
-             * Since this is the first ListPreference that the EarthquakePreferenceFragment is encountering,
+             * If this is the first ListPreference that the EarthquakePreferenceFragment is encountering,
              * update the onPreferenceChange() method in EarthquakePreferenceFragment
-             * to properly update the summary of a ListPreference (using the label, instead of the key).
              */
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
                 int prefIndex = listPreference.findIndexOfValue(stringValue);
                 if (prefIndex >= 0) {
                     CharSequence[] labels = listPreference.getEntries();
+                    // update the summary of a ListPreference (using the label, instead of the key)
                     preference.setSummary(labels[prefIndex]);
                 }
             } else {
+                // take care of updating the displayed preference summary after it has been changed
                 preference.setSummary(stringValue);
             }
+            // This method returns a boolean, so we can return false to prevent a proposed preference change
             return true;
         }
 
         /**
-         * helper method to set the current EarhtquakePreferenceFragment instance as the listener on each preference.
-         * We also read the current value of the preference stored in the SharedPreferences on the device,
-         * and display that in the preference summary (so that the user can see the current value of the preference).
+         * this helper method setups up the preference
          */
         private void bindPreferenceSummaryToValue(Preference preference) {
+            // set the current EarthquakePreferenceFragment instance as the listener on each preference to watch for value changes
             preference.setOnPreferenceChangeListener(this);
+            // read the current value of the preference stored in the SharedPreferences on the device
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+            // retrieve a String value from the preferences.
             String preferenceString = preferences.getString(preference.getKey(), "");
+            // display the preference values in the preference summary (so that the user can see the current value of the preference)
             onPreferenceChange(preference, preferenceString);
         }
     }
