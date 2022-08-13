@@ -1,6 +1,6 @@
 Quake Report App
 ===================================
-[Downlaod here](https://www.amazon.com/vineet-raj-QuakeReport/dp/B06XTPZ19X)
+Amazon app store link : [Downlaod here](https://www.amazon.com/vineet-raj-QuakeReport/dp/B06XTPZ19X)
 
 This app displays a list of recent earthquakes in the world
 from the U.S. Geological Survey (USGS) organization.
